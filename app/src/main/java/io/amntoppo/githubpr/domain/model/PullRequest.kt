@@ -12,5 +12,5 @@ data class PullRequest(
     val title: String,
     val updated_at: String,
     val user: User,
-    val repoName: String
-)
+    var repoName: String?
+) : java.io.Serializable

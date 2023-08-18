@@ -1,12 +1,18 @@
 package io.amntoppo.githubpr.di
 
+import android.app.Application
+import androidx.room.Room
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.amntoppo.githubpr.BuildConfig
+import io.amntoppo.githubpr.data.local.Converters
+import io.amntoppo.githubpr.data.local.GithubDatabase
 import io.amntoppo.githubpr.data.remote.PullRequestApi
 import io.amntoppo.githubpr.data.remote.RepositoryApi
+import io.amntoppo.githubpr.utils.GsonParser
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -49,4 +55,11 @@ object AppModule {
     @Singleton
     fun providePullRequestApi(retrofit: Retrofit): PullRequestApi =
         retrofit.create(PullRequestApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideDatabase(app: Application): GithubDatabase =
+        Room.databaseBuilder(app, GithubDatabase::class.java, "github_database")
+            .addTypeConverter(Converters(GsonParser(Gson())))
+            .build()
 }

@@ -12,4 +12,4 @@ data class Repository(
     val language: String,
     val name: String,
     val updated_at: String,
-)
+) : java.io.Serializable
