@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,11 +27,6 @@ class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPullRequestBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         val pullRequestAdapter = PullRequestAdapter()
         binding.apply {
             pullRequestRecycler.apply {
@@ -39,23 +35,18 @@ class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
             }
             progressBar.visibility = View.VISIBLE
         }
-        viewModel.getAllPullRequest().observe(this) {
-            if(it != null) {
-                when(it) {
-                    is Resource.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        pullRequestAdapter.submitList(it.data)
-                    }
-                    is Resource.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.textViewError.text = getString(R.string.error_found)
-                    }
-                    is Resource.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                }
-
+        viewModel.getAllPullRequest().observe(viewLifecycleOwner) { result ->
+            binding.apply {
+                pullRequestAdapter.submitList(result.data)
+                progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
+                textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()
+                textViewError.text = result.error?.localizedMessage
             }
         }
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 }
