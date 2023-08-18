@@ -30,7 +30,11 @@ class GithubRepository @Inject constructor(
             repoList.map {
                 withContext(Dispatchers.IO) {
                     var prs = async {
-                        pullRequestApi.getClosedPRList(it.name)
+                        var p = pullRequestApi.getClosedPRList(it.name)
+                        p.forEach { pull ->
+                            pull.repoName = it.name
+                        }
+                        return@async p
                     }
                     prList.addAll(prs.await())
                 }
@@ -39,6 +43,7 @@ class GithubRepository @Inject constructor(
             prList
         },
         saveRequest = { pulls ->
+
             githubDatabase.withTransaction {
                 pullRequestDao.deleteAllPullRequest()
                 pullRequestDao.insertPullRequests(pulls)
@@ -57,7 +62,7 @@ class GithubRepository @Inject constructor(
             pullRequestApi.getClosedPRList(repo)
         },
         saveRequest = {
-
+                      
         },
         shouldFetch = {true}
     )

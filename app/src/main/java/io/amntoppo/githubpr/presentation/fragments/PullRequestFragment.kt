@@ -43,6 +43,10 @@ class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
             repositoryName.let {
                 viewModel.getClosedPullRequests(it).observe(viewLifecycleOwner) { result ->
                     binding.apply {
+                        if(result.data.isNullOrEmpty()) {
+                            textViewError.isVisible = true
+                            textViewError.text = context?.getString(R.string.empty_pull_request)
+                        }
                         pullRequestAdapter.submitList(result.data)
                         progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
                         textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()

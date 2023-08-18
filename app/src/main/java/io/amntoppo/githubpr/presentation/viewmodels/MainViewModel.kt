@@ -30,11 +30,10 @@ class MainViewModel @Inject constructor(
     private val closedPrMutableData = MutableLiveData<Resource<out List<PullRequest>>>()
     val closedPRData: LiveData<Resource<out List<PullRequest>>> get() = closedPrMutableData
     private val repoPrMutableData = MutableLiveData<Resource<out List<PullRequest>>>()
-    val repoPRData: LiveData<Resource<out List<PullRequest>>> get() = closedPrMutableData
+    val repoPRData: LiveData<Resource<out List<PullRequest>>> get() = repoPrMutableData
     private val repositoryLiveData = MutableLiveData<Resource<out List<Repository>>>()
     val repositoryData: LiveData<Resource<out List<Repository>>> get() = repositoryLiveData
 
-//    val pullRequests = githubRepository.getAllClosedPullRequests()
     fun getAllPullRequest(): LiveData<Resource<out List<PullRequest>>> {
         viewModelScope.launch {
             githubRepository.getAllClosedPullRequests().collect {
