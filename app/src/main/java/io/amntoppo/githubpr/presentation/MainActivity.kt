@@ -29,31 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val pullRequestAdapter = PullRequestAdapter()
-        binding.apply {
-            pullRequestRecycler.apply {
-                adapter = pullRequestAdapter
-                layoutManager = LinearLayoutManager(this@MainActivity)
-            }
-            progressBar.visibility = VISIBLE
-        }
-        viewModel.getAllPullRequest().observe(this) {
-            if(it != null) {
-                when(it) {
-                    is Resource.Success -> {
-                        binding.progressBar.visibility = GONE
-                        pullRequestAdapter.submitList(it.data)
-                    }
-                    is Resource.Error -> {
 
-                    }
-                    is Resource.Loading -> {
-                        binding.progressBar.visibility = VISIBLE
-                    }
-                }
-
-            }
-        }
         setContentView(binding.root)
     }
 }

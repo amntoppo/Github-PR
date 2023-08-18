@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Github PR</string>
+    <string name="title_home">Home</string>
+    <string name="title_repository">Repository</string>
+    <string name="title_setting">Setting</string>
+    <string name="error_found">Could not process request</string>
     <attr format="color" name="colorIconPrimary"/>
 
 </resources>

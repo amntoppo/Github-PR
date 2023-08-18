@@ -20,5 +20,5 @@ interface PullRequestDao {
     suspend fun insertPullRequests(pullRequests: List<PullRequest>)
 
     @Query("DELETE FROM PullRequest")
-    suspend fun delectAllPullRequest()
+    suspend fun deleteAllPullRequest()
 }

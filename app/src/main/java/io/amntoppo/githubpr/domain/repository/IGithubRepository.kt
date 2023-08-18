@@ -9,7 +9,7 @@ interface IGithubRepository {
 
      fun getAllClosedPullRequests(): Flow<Resource<out List<PullRequest>>>
 
-//    suspend fun getClosedPullRequest(repo: String): Flow<Resource<List<PullRequest>>>
-//
-//    suspend fun getRepositoryList(): Flow<Resource<List<Repository>>>
+     fun getClosedPullRequest(repo: String): Flow<Resource<out List<PullRequest>>>
+
+     fun getRepositoryList(): Flow<Resource<out List<Repository>>>
 }

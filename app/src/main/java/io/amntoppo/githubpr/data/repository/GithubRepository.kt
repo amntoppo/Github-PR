@@ -5,14 +5,10 @@ import io.amntoppo.githubpr.data.local.GithubDatabase
 import io.amntoppo.githubpr.data.remote.PullRequestApi
 import io.amntoppo.githubpr.data.remote.RepositoryApi
 import io.amntoppo.githubpr.domain.model.PullRequest
-import io.amntoppo.githubpr.domain.model.Repository
 import io.amntoppo.githubpr.domain.repository.IGithubRepository
 import io.amntoppo.githubpr.utils.NetworkBoundResource
-import io.amntoppo.githubpr.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -23,6 +19,7 @@ class GithubRepository @Inject constructor(
 )
     : IGithubRepository {
     private val pullRequestDao = githubDatabase.pullRequestDao()
+    private val repositoryDao = githubDatabase.repositoryDao()
     override fun getAllClosedPullRequests() = NetworkBoundResource(
         query = {
             pullRequestDao.getAllClosedPullRequest()
@@ -43,7 +40,7 @@ class GithubRepository @Inject constructor(
         },
         saveRequest = { pulls ->
             githubDatabase.withTransaction {
-                pullRequestDao.delectAllPullRequest()
+                pullRequestDao.deleteAllPullRequest()
                 pullRequestDao.insertPullRequests(pulls)
             }
 
@@ -52,24 +49,32 @@ class GithubRepository @Inject constructor(
     )
 
 
-//    : Flow<Resource<List<PullRequest>>> {
-//        val PRList = ArrayList<PullRequest>()
-//        val repoList = repositoryApi.getRepoList()
-//        withContext(Dispatchers.IO) {
-//            repoList.map {
-//                launch {
-//                    PRList.addAll(pullRequestApi.getClosedPRList(it.name))
-//                }
-//            }
-//        }
-//    }
+    override fun getClosedPullRequest(repo: String) = NetworkBoundResource(
+        query = {
+            pullRequestDao.getAllClosedPullRequestByRepo(repo)
+        },
+        fetch = {
+            pullRequestApi.getClosedPRList(repo)
+        },
+        saveRequest = {
 
-//    override suspend fun getClosedPullRequest(repo: String): Flow<Resource<List<PullRequest>>> {
-//        return null
-////        TODO("Not yet implemented")
-//    }
-//
-//    override suspend fun getRepositoryList(): Flow<Resource<List<Repository>>> {
-////        TODO("Not yet implemented")
-//    }
+        },
+        shouldFetch = {true}
+    )
+
+    override fun getRepositoryList() = NetworkBoundResource(
+        query = {
+            repositoryDao.getAllRepository()
+        },
+        fetch = {
+            repositoryApi.getRepoList()
+        },
+        saveRequest = {
+            githubDatabase.withTransaction {
+                repositoryDao.deleteAllRepository()
+                repositoryDao.insertRepositories(it)
+            }
+        },
+        shouldFetch = {true}
+    )
 }
