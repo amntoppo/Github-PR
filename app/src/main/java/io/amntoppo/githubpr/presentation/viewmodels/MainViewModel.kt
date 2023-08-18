@@ -9,8 +9,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.amntoppo.githubpr.data.remote.PullRequestApi
 import io.amntoppo.githubpr.data.remote.RepositoryApi
 import io.amntoppo.githubpr.domain.model.PullRequest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
+import kotlin.time.DurationUnit
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -18,23 +19,23 @@ class MainViewModel @Inject constructor(
     val repositoryApi: RepositoryApi
 ): ViewModel() {
     private val closedPrMutableData = MutableLiveData<List<PullRequest>>()
-    public val closedPRData: LiveData<List<PullRequest>> get() = closedPrMutableData
+    val closedPRData: LiveData<List<PullRequest>> get() = closedPrMutableData
 
-    fun getClosedPR() {
+    fun getAllPullRequest(): LiveData<List<PullRequest>> {
         viewModelScope.launch {
-            var res = pullRequestApi.getClosedPRList("Github-PR")
-            Log.e("pull", res.toString())
-        }
-    }
-
-    fun getAllPullRequest() {
-        viewModelScope.launch {
-            var PRList = ArrayList<PullRequest>()
-            repositoryApi.getRepoList().forEach {
-//                PRList.addAll(pullRequestApi.getClosedPRList(it.name))
-                closedPrMutableData.value = pullRequestApi.getClosedPRList(it.name)
+            val PRList = ArrayList<PullRequest>()
+            val repoList = repositoryApi.getRepoList()
+            withContext(Dispatchers.IO) {
+               repoList.map {
+                   launch {
+                        PRList.addAll(pullRequestApi.getClosedPRList(it.name))
+                    }
+                }
             }
-
+            closedPrMutableData.value = PRList
         }
+        return closedPRData
+
     }
+
 }

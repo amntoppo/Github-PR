@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/pr_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/pr_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="?colorPrimary"
+            android:layout_marginStart="8dp"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toRightOf="@id/pr_image"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/pr_image"
+            tools:text="amntoppo" />
+
+
+        <TextView
+            android:id="@+id/pr_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pr_image"
+            tools:text=" New Pull Request" />
+
+        <ImageView
+            android:id="@+id/created_on_image_view"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="8dp"
+            android:contentDescription="created_on"
+            android:src="@drawable/ic_created_date_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pr_title" />
+
+        <TextView
+            android:id="@+id/pr_created_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/created_on_image_view"
+            app:layout_constraintLeft_toRightOf="@id/created_on_image_view"
+            app:layout_constraintTop_toTopOf="@id/created_on_image_view"
+            tools:text="1400" />
+
+        <ImageView
+            android:id="@+id/closed_on_image_view"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="8dp"
+            android:contentDescription="closed_on"
+            android:src="@drawable/ic_closed_pr_icon"
+            app:layout_constraintBottom_toBottomOf="@id/created_on_image_view"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintRight_toLeftOf="@id/pr_closedon"
+            app:layout_constraintTop_toTopOf="@id/created_on_image_view" />
+
+        <TextView
+            android:id="@+id/pr_closedon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/closed_on_image_view"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/created_on_image_view"
+            tools:text="1400" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

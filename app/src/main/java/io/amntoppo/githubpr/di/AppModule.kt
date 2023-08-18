@@ -7,6 +7,8 @@ import dagger.hilt.components.SingletonComponent
 import io.amntoppo.githubpr.BuildConfig
 import io.amntoppo.githubpr.data.remote.PullRequestApi
 import io.amntoppo.githubpr.data.remote.RepositoryApi
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -15,11 +17,26 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @Singleton
+    @Provides
+    fun getHttpClient(): OkHttpClient {
+        val interceptor: Interceptor = Interceptor { chain ->
+            val requestBuilder = chain.request().newBuilder()
+            requestBuilder.addHeader("Authorization", "Bearer ${BuildConfig.AUTH_TOKEN}")
+            requestBuilder.addHeader("User-Agent", "Github-Closed-PR-App")
+            chain.proceed(requestBuilder.build())
+        }
+        val builder = OkHttpClient().newBuilder()
+        builder.addInterceptor(interceptor)
+        return builder.build()
+    }
+
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit = Retrofit
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit
         .Builder()
         .baseUrl(BuildConfig.BASE_URL)
+        .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
