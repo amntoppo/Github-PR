@@ -42,14 +42,6 @@ class MainActivity : AppCompatActivity() {
                 pullRequestAdapter.submitList(it)
             }
         }
-//        viewModel.closedPRData.observe(this) { pull ->
-////                pullRequestAdapter.submitList(pull)
-//
-//            pull.forEach {
-//                Log.e("pull", it.number.toString())
-//               pullRequestAdapter.submitList(listOf(it))
-//            }
-//        }
         setContentView(binding.root)
     }
 }

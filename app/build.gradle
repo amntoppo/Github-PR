@@ -18,7 +18,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BASE_URL", '"https://api.github.com/"'
-        buildConfigField "String", "AUTH_TOKEN", '"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"'
+        buildConfigField "String", "AUTH_TOKEN", '"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"'
     }
 
     buildTypes {
