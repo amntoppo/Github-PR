@@ -62,7 +62,7 @@ class GithubRepository @Inject constructor(
             pullRequestApi.getClosedPRList(repo)
         },
         saveRequest = {
-                      
+
         },
         shouldFetch = {true}
     )

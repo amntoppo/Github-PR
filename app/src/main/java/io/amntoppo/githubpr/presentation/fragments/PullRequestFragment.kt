@@ -45,12 +45,15 @@ class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
                     binding.apply {
                         if(result.data.isNullOrEmpty()) {
                             textViewError.isVisible = true
+                            progressBar.isVisible = false
                             textViewError.text = context?.getString(R.string.empty_pull_request)
+                        } else {
+                            pullRequestAdapter.submitList(result.data)
+                            progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
+                            textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()
+                            textViewError.text = result.error?.localizedMessage
+
                         }
-                        pullRequestAdapter.submitList(result.data)
-                        progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
-                        textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()
-                        textViewError.text = result.error?.localizedMessage
                     }
                 }
             }
