@@ -15,6 +15,7 @@ import io.amntoppo.githubpr.databinding.ActivityMainBinding
 import io.amntoppo.githubpr.domain.model.PullRequest
 import io.amntoppo.githubpr.presentation.adapters.PullRequestAdapter
 import io.amntoppo.githubpr.presentation.viewmodels.MainViewModel
+import io.amntoppo.githubpr.utils.Resource
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,8 +39,19 @@ class MainActivity : AppCompatActivity() {
         }
         viewModel.getAllPullRequest().observe(this) {
             if(it != null) {
-                binding.progressBar.visibility = GONE
-                pullRequestAdapter.submitList(it)
+                when(it) {
+                    is Resource.Success -> {
+                        binding.progressBar.visibility = GONE
+                        pullRequestAdapter.submitList(it.data)
+                    }
+                    is Resource.Error -> {
+
+                    }
+                    is Resource.Loading -> {
+                        binding.progressBar.visibility = VISIBLE
+                    }
+                }
+
             }
         }
         setContentView(binding.root)

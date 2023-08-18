@@ -12,6 +12,8 @@ import io.amntoppo.githubpr.data.local.Converters
 import io.amntoppo.githubpr.data.local.GithubDatabase
 import io.amntoppo.githubpr.data.remote.PullRequestApi
 import io.amntoppo.githubpr.data.remote.RepositoryApi
+import io.amntoppo.githubpr.data.repository.GithubRepository
+import io.amntoppo.githubpr.domain.repository.IGithubRepository
 import io.amntoppo.githubpr.utils.GsonParser
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -62,4 +64,14 @@ object AppModule {
         Room.databaseBuilder(app, GithubDatabase::class.java, "github_database")
             .addTypeConverter(Converters(GsonParser(Gson())))
             .build()
+
+    @Provides
+    @Singleton
+    fun provideRepository(
+        db: GithubDatabase,
+        pullRequestApi: PullRequestApi,
+        repositoryApi: RepositoryApi
+    ): IGithubRepository {
+        return GithubRepository(repositoryApi, pullRequestApi, db)
+    }
 }

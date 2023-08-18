@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PullRequestDao {
 
+    @Query("SELECT * FROM PullRequest")
+    fun getAllClosedPullRequest(): Flow<List<PullRequest>>
+
     @Query("SELECT * FROM PullRequest WHERE repoName LIKE '%' || :repoName || '%'")
-    fun getAllClosedPullRequest(repoName: String): Flow<List<PullRequest>>
+    fun getAllClosedPullRequestByRepo(repoName: String): Flow<List<PullRequest>>
 
     @Insert(onConflict = REPLACE)
     suspend fun insertPullRequests(pullRequests: List<PullRequest>)
