@@ -1,13 +1,16 @@
 package io.amntoppo.githubpr.domain.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "PullRequest")
 data class PullRequest(
-    val body: Any,
     val closed_at: String,
     val created_at: String,
-    val id: Int,
-    val merged_at: Any,
+    @PrimaryKey val id: Int,
     val state: String,
     val title: String,
     val updated_at: String,
-    val user: User
+    val user: User,
+    val repoName: String
 )
