@@ -9,6 +9,7 @@
 
 
 ## Screenshot :eyes:
-![image](https://github.com/amntoppo/Github-PR/assets/22256112/16277883-db80-46dd-939b-9bcae13f1da5)
+![image](https://github.com/amntoppo/Github-PR/assets/22256112/820a1026-1bd2-4c74-9283-2406c6df6991)
+
 ![image](https://github.com/amntoppo/Github-PR/assets/22256112/310716a4-73d9-4b53-9273-b60176bdc0a5)
 
