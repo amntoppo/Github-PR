@@ -36,7 +36,7 @@ class PullRequestApiTest {
         repositoryMockResponse.setResponseCode(200)
         mockWebServer.enqueue(repositoryMockResponse)
 
-        val response = pullRequestApi.getPRList("Github-PR")
+        val response = pullRequestApi.getClosedPRList("Github-PR")
         mockWebServer.takeRequest(1, TimeUnit.SECONDS)
 
 

@@ -3,10 +3,13 @@ package io.amntoppo.githubpr.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import io.amntoppo.githubpr.R
 import io.amntoppo.githubpr.data.remote.PullRequestApi
 import io.amntoppo.githubpr.data.remote.RepositoryApi
+import io.amntoppo.githubpr.databinding.ActivityMainBinding
+import io.amntoppo.githubpr.presentation.viewmodels.MainViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,16 +17,19 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var pullRequestApi: PullRequestApi
-    @Inject
-    lateinit var reqpositoryApi: RepositoryApi
+    private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        GlobalScope.launch {
-            var repo = reqpositoryApi.getRepoList()
-            Log.e("repo", repo.toString());
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        viewModel.getAllPullRequest()
+
+            viewModel.closedPRData.observe(this) { pull ->
+            pull.forEach {
+                Log.e("pull", it.number.toString())
+            }
         }
+        setContentView(binding.root)
     }
 }
