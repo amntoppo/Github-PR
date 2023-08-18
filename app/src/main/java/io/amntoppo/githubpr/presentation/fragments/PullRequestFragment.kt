@@ -27,6 +27,10 @@ class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPullRequestBinding.inflate(inflater, container, false)
+
+        val bundle: Bundle? = this.arguments
+        val repositoryName = bundle?.getString("repository_name")
+
         val pullRequestAdapter = PullRequestAdapter()
         binding.apply {
             pullRequestRecycler.apply {
@@ -35,14 +39,28 @@ class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
             }
             progressBar.visibility = View.VISIBLE
         }
-        viewModel.getAllPullRequest().observe(viewLifecycleOwner) { result ->
-            binding.apply {
-                pullRequestAdapter.submitList(result.data)
-                progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
-                textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()
-                textViewError.text = result.error?.localizedMessage
+        if(!repositoryName.isNullOrEmpty()) {
+            repositoryName.let {
+                viewModel.getClosedPullRequests(it).observe(viewLifecycleOwner) { result ->
+                    binding.apply {
+                        pullRequestAdapter.submitList(result.data)
+                        progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
+                        textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()
+                        textViewError.text = result.error?.localizedMessage
+                    }
+                }
+            }
+        } else {
+            viewModel.getAllPullRequest().observe(viewLifecycleOwner) { result ->
+                binding.apply {
+                    pullRequestAdapter.submitList(result.data)
+                    progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
+                    textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()
+                    textViewError.text = result.error?.localizedMessage
+                }
             }
         }
+
         return binding.root
     }
 

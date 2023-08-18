@@ -3,11 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/pullRequestFragment">
+    app:startDestination="@id/navigation_home">
 
     <fragment
-        android:id="@+id/pullRequestFragment"
+        android:id="@+id/navigation_home"
         android:name="io.amntoppo.githubpr.presentation.fragments.PullRequestFragment"
-        android:label="fragment_pull_request"
+        android:label="Pull Request"
         tools:layout="@layout/fragment_pull_request" />
+    <fragment
+        android:id="@+id/navigation_pullrequest"
+        android:name="io.amntoppo.githubpr.presentation.fragments.PullRequestFragment"
+        android:label="Pull Request"
+        tools:layout="@layout/fragment_pull_request" />
+    <fragment
+        android:id="@+id/navigation_repository"
+        android:name="io.amntoppo.githubpr.presentation.fragments.RepositoryFragment"
+        android:label="Repositories" >
+        <action
+            android:id="@+id/action_navigation_repository_to_navigation_pullrequest"
+            app:destination="@id/navigation_pullrequest" />
+    </fragment>
 </navigation>
