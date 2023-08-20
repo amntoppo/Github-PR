@@ -16,6 +16,7 @@ import io.amntoppo.githubpr.R
 import io.amntoppo.githubpr.databinding.FragmentPullRequestBinding
 import io.amntoppo.githubpr.presentation.adapters.PullRequestAdapter
 import io.amntoppo.githubpr.presentation.viewmodels.MainViewModel
+import io.amntoppo.githubpr.utils.REPOSITORY_NAME
 import io.amntoppo.githubpr.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -33,7 +34,7 @@ class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
         binding = FragmentPullRequestBinding.inflate(inflater, container, false)
 
         val bundle: Bundle? = this.arguments
-        val repositoryName = bundle?.getString("repository_name")
+        val repositoryName = bundle?.getString(REPOSITORY_NAME)
 
         val pullRequestAdapter = PullRequestAdapter()
         binding.apply {

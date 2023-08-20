@@ -9,3 +9,5 @@ fun getFormattedDate(date: String): String {
     val finalDate: Date = inputFormat.parse(date) as Date
     return outputFormat.format(finalDate)
 }
+
+const val REPOSITORY_NAME = "repository_name"

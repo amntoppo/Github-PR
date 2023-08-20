@@ -17,6 +17,7 @@ import io.amntoppo.githubpr.presentation.adapters.RepositoryAdapter
 import io.amntoppo.githubpr.presentation.listeners.RepositoryOnClickListener
 import io.amntoppo.githubpr.presentation.viewmodels.MainViewModel
 import io.amntoppo.githubpr.presentation.viewmodels.RepositoryViewModel
+import io.amntoppo.githubpr.utils.REPOSITORY_NAME
 import io.amntoppo.githubpr.utils.Resource
 
 class RepositoryFragment: Fragment(R.layout.fragment_repository), RepositoryOnClickListener {
@@ -58,7 +59,7 @@ class RepositoryFragment: Fragment(R.layout.fragment_repository), RepositoryOnCl
 
     override fun onRepositoryClick(modelItem: Repository) {
         val bundle = Bundle()
-        bundle.putString("repository_name", modelItem.name)
+        bundle.putString(REPOSITORY_NAME, modelItem.name)
         val navHostFragment =
             activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navHostFragment.navController.navigate(R.id.action_navigation_repository_to_navigation_pullrequest, bundle)
