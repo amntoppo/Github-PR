@@ -25,7 +25,6 @@ class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
     lateinit var binding: FragmentPullRequestBinding
     val viewModel: MainViewModel by viewModels()
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,7 +45,7 @@ class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
         }
         if(!repositoryName.isNullOrEmpty()) {
             lifecycleScope.launch {
-                viewModel.getSharedPull(repositoryName)
+                viewModel.getPullRequest(repositoryName)
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.pullRequestStateFlow.collect { result ->
                         binding.apply {
@@ -72,7 +71,4 @@ class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 }

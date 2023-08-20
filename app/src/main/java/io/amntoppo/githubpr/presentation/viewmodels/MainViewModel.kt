@@ -18,8 +18,8 @@ class MainViewModel @Inject constructor(
     var allPullRequestData = githubRepository.getAllClosedPullRequests().asLiveData()
 
 
-    //Demonstration of SharedFlow as a State holder, substitute of LiveData
-    fun getSharedPull(repo: String) {
+    //Demonstration of StateFlow as a State holder, substitute of LiveData
+    fun getPullRequest(repo: String) {
         viewModelScope.launch {
             githubRepository.getClosedPullRequest(repo).collect {
                 _pullRequestStateFlow.value = it
