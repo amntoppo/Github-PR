@@ -13,7 +13,7 @@ interface PullRequestDao {
     @Query("SELECT * FROM PullRequest")
     fun getAllClosedPullRequest(): Flow<List<PullRequest>>
 
-    @Query("SELECT * FROM PullRequest WHERE repoName LIKE '%' || :repoName || '%'")
+    @Query("SELECT * FROM PullRequest WHERE repoName = :repoName")
     fun getAllClosedPullRequestByRepo(repoName: String): Flow<List<PullRequest>>
 
     @Insert(onConflict = REPLACE)

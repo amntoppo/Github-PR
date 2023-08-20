@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.amntoppo.githubpr.R
@@ -14,12 +17,14 @@ import io.amntoppo.githubpr.databinding.FragmentPullRequestBinding
 import io.amntoppo.githubpr.presentation.adapters.PullRequestAdapter
 import io.amntoppo.githubpr.presentation.viewmodels.MainViewModel
 import io.amntoppo.githubpr.utils.Resource
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
 
     lateinit var binding: FragmentPullRequestBinding
-    val viewModel: MainViewModel by activityViewModels()
+    val viewModel: MainViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,25 +45,21 @@ class PullRequestFragment: Fragment(R.layout.fragment_pull_request) {
             progressBar.visibility = View.VISIBLE
         }
         if(!repositoryName.isNullOrEmpty()) {
-            repositoryName.let {
-                viewModel.getClosedPullRequests(it).observe(viewLifecycleOwner) { result ->
-                    binding.apply {
-                        if(result.data.isNullOrEmpty()) {
-                            textViewError.isVisible = true
-                            progressBar.isVisible = false
-                            textViewError.text = context?.getString(R.string.empty_pull_request)
-                        } else {
+            lifecycleScope.launch {
+                viewModel.getSharedPull(repositoryName)
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.pullRequestStateFlow.collect { result ->
+                        binding.apply {
                             pullRequestAdapter.submitList(result.data)
                             progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
-                            textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()
-                            textViewError.text = result.error?.localizedMessage
-
+                            textViewError.isVisible = result is Resource.Error || result !is Resource.Loading && result.data.isNullOrEmpty()
+                            textViewError.text = result.error?.localizedMessage ?: context?.getString(R.string.empty_pull_request)
                         }
                     }
                 }
             }
         } else {
-            viewModel.getAllPullRequest().observe(viewLifecycleOwner) { result ->
+            viewModel.allPullRequestData.observe(viewLifecycleOwner) { result ->
                 binding.apply {
                     pullRequestAdapter.submitList(result.data)
                     progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()

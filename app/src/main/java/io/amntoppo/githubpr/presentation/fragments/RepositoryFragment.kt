@@ -16,12 +16,13 @@ import io.amntoppo.githubpr.domain.model.Repository
 import io.amntoppo.githubpr.presentation.adapters.RepositoryAdapter
 import io.amntoppo.githubpr.presentation.listeners.RepositoryOnClickListener
 import io.amntoppo.githubpr.presentation.viewmodels.MainViewModel
+import io.amntoppo.githubpr.presentation.viewmodels.RepositoryViewModel
 import io.amntoppo.githubpr.utils.Resource
 
 class RepositoryFragment: Fragment(R.layout.fragment_repository), RepositoryOnClickListener {
 
     lateinit var binding: FragmentRepositoryBinding
-    val viewModel: MainViewModel by activityViewModels()
+    val viewModel: RepositoryViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +38,7 @@ class RepositoryFragment: Fragment(R.layout.fragment_repository), RepositoryOnCl
                 layoutManager = LinearLayoutManager(requireContext())
             }
 
-            viewModel.getAllRepository().observe(viewLifecycleOwner) { result ->
+            viewModel.repositoryData.observe(viewLifecycleOwner) { result ->
                 binding.apply {
                     repositoryAdapter.submitList(result.data)
                     progressBar.isVisible =
@@ -47,7 +48,6 @@ class RepositoryFragment: Fragment(R.layout.fragment_repository), RepositoryOnCl
                     textViewError.text = result.error?.localizedMessage
                 }
             }
-
             return binding.root
         }
     }

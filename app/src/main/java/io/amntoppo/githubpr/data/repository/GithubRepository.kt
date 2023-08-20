@@ -29,9 +29,8 @@ class GithubRepository @Inject constructor(
             var prList = ArrayList<PullRequest>()
             repoList.map {
                 withContext(Dispatchers.IO) {
-                    var prs = async {
-                        var p = pullRequestApi.getClosedPRList(it.name)
-                        p.forEach { pull ->
+                    val prs = async {
+                        val p = pullRequestApi.getClosedPRList(it.name).onEach { pull ->
                             pull.repoName = it.name
                         }
                         return@async p
