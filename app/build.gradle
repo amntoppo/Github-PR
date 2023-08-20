@@ -18,7 +18,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BASE_URL", '"https://api.github.com/"'
-        buildConfigField "String", "AUTH_TOKEN", '"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"'
+        buildConfigField "String", "AUTH_TOKEN", '"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"'
     }
 
     buildTypes {
@@ -49,6 +49,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
+
 
     //Navigation
     implementation 'androidx.navigation:navigation-fragment:2.7.0'
